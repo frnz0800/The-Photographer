@@ -13,6 +13,8 @@ public class EnemyController : MonoBehaviour, IFlashable
 
     [SerializeField] private Transform targetTransform;
 
+    [SerializeField] private GameObject jumpscareScreen;
+
     private NavMeshAgent agent;
 
     private bool isBlind = false;
@@ -33,6 +35,15 @@ public class EnemyController : MonoBehaviour, IFlashable
         agent.speed = walkSpeed;
     }
 
+    private IEnumerator Jumpscare()
+    {
+        jumpscareScreen.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+
+        LoadingManager.Manager.StartLoading("ForestNight");
+    }
+
     public void Flash()
     {
         if (!isBlind)
@@ -47,6 +58,14 @@ public class EnemyController : MonoBehaviour, IFlashable
 
         canChase = true;
         IsMoving?.Invoke();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(Jumpscare());
+        }
     }
 
     private void OnEnable()
