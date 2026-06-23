@@ -38,6 +38,7 @@ public class EnemyController : MonoBehaviour, IFlashable
     private IEnumerator Jumpscare()
     {
         jumpscareScreen.SetActive(true);
+        jumpscareScreen.GetComponent<AudioSource>().Play();
 
         yield return new WaitForSeconds(1);
 
